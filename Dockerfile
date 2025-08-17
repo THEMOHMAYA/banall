@@ -1,14 +1,15 @@
+# Base image
 FROM python:3.11-slim
 
-# Set work directory
+# Set working directory
 WORKDIR /app
 
-# Install dependencies
+# Copy requirements and install
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy project files
+# Copy all project files into container
 COPY . .
 
-# Run bot
+# Run your bot
 CMD ["python3", "__main__.py"]
