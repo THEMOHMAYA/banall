@@ -1,8 +1,9 @@
 import os
 import logging
-from pyrogram import Client, filters, idle
+from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
-from pyrogram.errors import ChatAdminRequired
+from pyrogram.errors import ChatAdminRequired, PeerIdInvalid
+from pyrogram.enums import ChatMembersFilter
 
 # Logging setup
 logging.basicConfig(
@@ -11,7 +12,7 @@ logging.basicConfig(
 )
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
-# Config vars (Render me Environment Variables set karna hoga)
+# Config vars (Render / Termux me ENV set karna hoga)
 API_ID = int(os.getenv("API_ID", 0))
 API_HASH = os.getenv("API_HASH", "")
 BOT_TOKEN = os.getenv("BOT_TOKEN", "")
@@ -35,11 +36,7 @@ async def start_command(client, message: Message):
             "⚠️ Nᴏᴛᴇ: Usᴇ Tʜɪs Bᴏᴛ Fᴏʀ Fᴜɴ & Gʀᴏᴜᴘ Mᴀɴᴀɢᴇᴍᴇɴᴛ!"
         ),
         reply_markup=InlineKeyboardMarkup(
-            [
-                [
-                    InlineKeyboardButton("👑 ᴏᴡɴᴇʀ", url=f"https://t.me/{OWNER}")
-                ]
-            ]
+            [[InlineKeyboardButton("👑 ᴏᴡɴᴇʀ", url=f"https://t.me/{OWNER}")]]
         )
     )
 
@@ -49,7 +46,12 @@ async def banall_command(client, message: Message):
     if not message.from_user:
         return
     
-    admins = [admin.user.id async for admin in client.get_chat_members(message.chat.id, filter="administrators")]
+    # Check admin
+    admins = [
+        admin.user.id async for admin in client.get_chat_members(
+            message.chat.id, filter=ChatMembersFilter.ADMINISTRATORS
+        )
+    ]
     if message.from_user.id not in admins:
         await message.reply("❌ Only admins can use this command!")
         return
@@ -58,20 +60,21 @@ async def banall_command(client, message: Message):
 
     async for member in client.get_chat_members(message.chat.id):
         try:
-            if member.user.is_bot or member.user.id == message.from_user.id:
+            if member.user.is_bot or member.user.id in admins:
                 continue
             await client.ban_chat_member(chat_id=message.chat.id, user_id=member.user.id)
             logging.info(f"Banned {member.user.id} from {message.chat.id}")
         except ChatAdminRequired:
             await message.reply("⚠️ I need **Ban Members** permission!")
             break
+        except PeerIdInvalid:
+            continue
         except Exception as e:
             logging.warning(f"Failed to ban {member.user.id}: {e}")
 
     await message.reply("✅ Bᴀɴᴀʟʟ Pʀᴏᴄᴇss Cᴏᴍᴘʟᴇᴛᴇᴅ!")
 
-# Start the bot
+# Run bot
 if __name__ == "__main__":
-    app.start()
     print("🚀 Banall Bot Booted Successfully")
-    idle()
+    app.run()
