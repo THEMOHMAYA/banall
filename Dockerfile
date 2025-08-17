@@ -12,4 +12,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Run your bot
-CMD ["python3", "__main__.py"]
+CMD ["python3", "Ayush"]
