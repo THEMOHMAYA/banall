@@ -1,0 +1,25 @@
+{
+  "name": "ʙᴀɴᴀʟʟ ʙᴏᴛ",
+  "description": "🥀 Aɴ ᴜʟᴛʀᴀғᴀsᴛ Bᴀɴᴀʟʟ Bᴏᴛ ɪɴ ᴡʜᴏʟᴇ Tᴇʟᴇɢʀᴀᴍ 💘 Uᴘᴅᴀᴛᴇᴅ & Pᴏᴡᴇʀᴇᴅ ʙʏ ᴀʏᴜsʜ",
+  "logo": "https://telegra.ph/file/b26847056f19c1b5d7712.jpg",
+  "keywords": ["banall", "telegram-bot", "pyrogram", "ayush"],
+  "repository": "https://github.com/YOUR-USERNAME/banall-bot",
+  "env": {
+    "BOT_TOKEN": {
+      "description": "Your bot token from @BotFather",
+      "required": true
+    },
+    "OWNER": {
+      "description": "Your Telegram username without @ (example: ayush)",
+      "required": true
+    },
+    "API_HASH": {
+      "description": "Get this from https://my.telegram.org",
+      "required": true
+    },
+    "API_ID": {
+      "description": "Get this from https://my.telegram.org",
+      "required": true
+    }
+  }
+}
